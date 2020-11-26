@@ -1,7 +1,5 @@
-import React, { Component } from 'react'
-import DocumentListItem from './DocumentListItem'
-
-
+import React, { Component } from 'react';
+import DocumentListItem from './DocumentListItem';
 
 class DocumentList extends Component {
 
@@ -38,13 +36,12 @@ class DocumentList extends Component {
     }
     
     render() {
-        
-        let documentWithTask = this.props.portfolio.filter(document => document.tasks.length > 0)
         let projectNames = this.props.portfolio.reduce((unique, item) => unique.includes(item.projectName) ? unique : [...unique, item.projectName], [])
         return(
             <div>
                 <input type="checkbox" id="cb1" name="cb1" value={this.state.toggle} onChange={this.checkboxOnChange}></input>
-                <label>Hide documents with no tasks</label><br></br>
+                <label>Hide documents with no tasks</label>
+                <br></br>
                 <label>
                      Select project name
                     <select value={this.state.dropdownValue} onChange={this.handleChange}>
@@ -57,11 +54,10 @@ class DocumentList extends Component {
                 <table>
                     <thead>
                         <tr>
-                        <th>Document Name</th>
-                        <th>Site Name</th>
-                        <th>Project Name</th>
-                        
-                        <th>Number of Tasks</th>
+                            <th>Document Name</th>
+                            <th>Site Name</th>
+                            <th>Project Name</th>
+                            <th>Number of Tasks</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -74,5 +70,5 @@ class DocumentList extends Component {
     }
 }
 
-export default DocumentList
+export default DocumentList;
 
