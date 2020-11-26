@@ -63,8 +63,6 @@ class App extends Component {
       let portfolioTasks = portfolio.sites.map(site => {
         return site.projects.map(project => {
           return project.documents.map(document => {
-            // document.tasks = document.id in tasksByDocId ? tasksByDocId[document.id] : []
-            
             return {
               ...document,
               tasks: document.id in tasksByDocId ? tasksByDocId[document.id] : [],

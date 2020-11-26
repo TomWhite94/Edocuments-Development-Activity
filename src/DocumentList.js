@@ -6,7 +6,8 @@ import DocumentListItem from './DocumentListItem'
 class DocumentList extends Component {
 
     state = {
-        toggle: false
+        toggle: false,
+        dropdownValue: '',
     }
     
     checkboxOnChange = () => {
@@ -14,15 +15,45 @@ class DocumentList extends Component {
             toggle: !this.state.toggle
         })
     }
+
+    handleChange = event => {
+        this.setState({
+            dropdownValue: event.target.value
+        })
+
+    }
+
+    filterDocuments = () => {
+        // filter through all documents based on filterable criteria (has tasks and/or is from selected project)
+        return (this.props.portfolio.filter(document => {
+            // apply 'has tasks' toggle: if toggle 'true' then check if document has tasks
+            let hasTasks = !this.state.toggle || (this.state.toggle && document.tasks.length > 0)
+            // check if document matches selected project name (if project specified)
+            let isInSelectedProject = ['', document.projectName].includes(this.state.dropdownValue)
+            // return if both are true
+            return hasTasks && isInSelectedProject  
+            
+
+        }))
+    }
     
     render() {
+        
         let documentWithTask = this.props.portfolio.filter(document => document.tasks.length > 0)
-        console.log(documentWithTask)
-        console.log(this.props.portfolio)
+        let projectNames = this.props.portfolio.reduce((unique, item) => unique.includes(item.projectName) ? unique : [...unique, item.projectName], [])
         return(
             <div>
                 <input type="checkbox" id="cb1" name="cb1" value={this.state.toggle} onChange={this.checkboxOnChange}></input>
-                <label for="cb1">Hide documents with no tasks</label><br></br>
+                <label>Hide documents with no tasks</label><br></br>
+                <label>
+                     Select project name
+                    <select value={this.state.dropdownValue} onChange={this.handleChange}>
+                        <option value="">All projects</option>
+                        {projectNames.map(name => {
+                            return <option key={name}>{name} </option>
+                        })}
+                    </select>
+                </label>
                 <table>
                     <thead>
                         <tr>
@@ -34,7 +65,7 @@ class DocumentList extends Component {
                         </tr>
                     </thead>
                     <tbody>
-                        {this.state.toggle === false ? this.props.portfolio.map(document => <DocumentListItem key={document.id} {...document}/>) : documentWithTask.map(document => <DocumentListItem key={document.id} {...document}/>) }
+                        {this.filterDocuments().map(document => <DocumentListItem key={document.id} {...document}/>)} 
                     </tbody>
                 </table>
             </div>
